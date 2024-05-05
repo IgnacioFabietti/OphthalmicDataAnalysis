@@ -1,0 +1,276 @@
+---
+title: "AMD Analysis"
+format:
+  html:
+    toc: true
+execute:
+  echo: false
+---
+# Introduction
+
+This report aims to identify causes of AMD.
+
+```{python}
+#load packages
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+import statsmodels.api as sm 
+import scipy.stats
+from sklearn.linear_model import LogisticRegression
+
+pd.options.display.float_format = "{:,.2f}".format
+
+```
+
+# Load Data & Description
+
+```{python}
+#load data and print unique ids
+ocular_df=pd.read_csv(".\DataSet\MEH_AMD_survivaloutcomes_database.csv")
+ocular_df=ocular_df.iloc[:, 2:]
+print("number of subjects is: ", ocular_df['anon_id'].nunique())
+```
+
+As per the The Second Report of Age-related Macular Degeneration Audit (AMD) of the National Ophthalmology Database Audit report, we define the proportion of eyes with “good” visual acuity (≥ 70 ETDRS letters) after one year of treatment and the proportion of eyes with “poor” visual acuity change (≥10 ETDRS letter loss) after one year of treatment.
+
+```{python}
+# define response variable
+#group per id
+label=ocular_df.groupby(by='anon_id').agg({'va':['first','last']})
+label.columns = label.columns.droplevel(0) 
+#difference between first and last measurement
+label["diff"]=label["last"]-label["first"]
+#calculate outcome
+label["va outcome"]=np.where(label["last"]>=70, "good", np.where(label["diff"]<=-10, "bad","no change"))
+# drop those that haven't improved or worsend
+label=label[label["va outcome"]!="no change"]
+#reset index
+label=label.reset_index(drop=False)
+#merge data back to have all covariates
+rj=ocular_df.groupby(by='anon_id').agg('first')
+ocular_df_f = label.merge(rj, on='anon_id', how='left')
+#remove irrelevant columns or those with duplicate information
+#ocular_df_f= ocular_df_f.drop(columns=['first','last','diff','date_inj1',"va_inj1_group",'time','injgiven','va','injnum'])
+ocular_df_f= ocular_df_f.drop(columns=['first','last','diff','date_inj1','time','injgiven','va','injnum'])
+```
+
+## Proportion
+
+The propotion of the classes are:
+
+```{python}
+display(ocular_df_f['va outcome'].value_counts(normalize=True) * 100)
+```
+
+and in absolute numbers:
+
+```{python}
+display(ocular_df_f['va outcome'].value_counts())
+```
+
+## Continous Variables
+
+In this section we visualise and describe the continous variables:
+
+###  Mean injection interval (mean_inj_interval)
+
+Mean interval between injections in induction phase in days.
+
+Normalised plot:
+
+```{python}
+plt.figure(figsize=(16,8))
+sns.histplot(x = 'mean_inj_interval', hue = "va outcome", data = ocular_df_f, element="step", log_scale=True)
+```
+
+The mode, minimum and maximum mean_inj_interval per group are:
+
+```{python}
+ocular_df_f.groupby(by='va outcome')['mean_inj_interval'].agg([pd.Series.mode,'min','max'])
+```
+
+It is a time-based feature, where both classes share the mode and minimum spacing, with the bad class having a higher max spacing.
+
+## Categorical Variables
+
+In this section we visualise and describe the categorical/binary variables:
+
+###  Gender
+
+Gender of patient (m = male, f = female).
+
+Normalised plot:
+
+```{python}
+g = sns.FacetGrid(ocular_df_f, col="va outcome")
+g.map(sns.histplot, "gender",stat="density", common_norm=False)
+```
+
+The proportions of gender per group are:
+
+```{python}
+display(pd.DataFrame(ocular_df_f.groupby(by='va outcome')['gender'].value_counts(normalize=True) * 100))
+```
+
+Where the female to male ratio is closely to 62/38% in both.
+
+###  Ethnicity
+
+Normalised plot:
+
+```{python}
+g = sns.FacetGrid(ocular_df_f, col="va outcome", height=5, aspect= 1.33)
+g.map(sns.histplot, "ethnicity",stat="density", common_norm=False)
+```
+
+The proportions of Ethnicity per group are:
+
+```{python}
+display(pd.DataFrame(ocular_df_f.groupby(by='va outcome')['ethnicity'].value_counts(normalize=True) * 100))
+```
+
+Where in the bad outcome we find 3% more caucasian, 3% less other, 1% more south east asian, half of the afrocarribean and 0.1% more mixed.
+
+
+###  Age group (age_group)
+
+Age at initiation of anti-VEGF therapy (50-59 years, 60-69 years, 70-79 years, 80 years and above).
+
+Normalised plot:
+
+```{python}
+g = sns.FacetGrid(ocular_df_f.sort_values(by="age_group"), col="va outcome")
+g.map(sns.histplot, "age_group",stat="density", common_norm=False)
+```
+
+The proportions of Age group per group are:
+
+```{python}
+display(pd.DataFrame(ocular_df_f.groupby(by='va outcome')['age_group'].value_counts(normalize=True) * 100))
+```
+
+Where we see an increase of counts from younger to older bins in both groups, however the bad category has a significant (10% more) over 80 than the good category.
+
+###  Loaded (loaded)
+
+If the induction phase was appropriately completed within 90 days (loaded) or not (nonleaded).
+
+Normalised plot:
+
+```{python}
+g = sns.FacetGrid(ocular_df_f, col="va outcome")
+g.map(sns.histplot, "loaded",stat="density", common_norm=False)
+```
+
+The proportions of loaded per group are:
+
+```{python}
+display(pd.DataFrame(ocular_df_f.groupby(by='va outcome')['loaded'].value_counts(normalize=True) * 100))
+```
+
+Where we see a slight increase of non loaded (5%) in the bad category compared to the good category.
+
+###  Regimen
+
+If the anti-VEGF drug given is ranibizumab (Ranabizumab only) or aflibercept (Aflibercept only).
+
+Normalised plot
+
+```{python}
+g = sns.FacetGrid(ocular_df_f, col="va outcome", height=4)
+g.map(sns.histplot, "regimen",stat="density", common_norm=False)
+```
+
+The proportions of regimen per group are:
+
+```{python}
+display(pd.DataFrame(ocular_df_f.groupby(by='va outcome')['regimen'].value_counts(normalize=True) * 100))
+```
+
+Where we see a very simlar proportion in both groups.
+
+###  Visual Acuity at first injection group (va_inj1_group)
+
+Visual acuity at baseline (initiation of anti-VEGF therapy) in early treatment diabetic retinopathy study letter score.
+
+Normalised plot
+
+```{python}
+g = sns.FacetGrid(ocular_df_f, col="va outcome", height=4)
+g.map(sns.histplot, "va_inj1_group",stat="density", common_norm=False)
+```
+
+The proportions of va_inj1_group per group are:
+
+```{python}
+display(pd.DataFrame(ocular_df_f.groupby(by='va outcome')['va_inj1_group'].value_counts(normalize=True) * 100))
+```
+
+Where we seea change in the mode from >=70 in good to 50-69 in bad. 
+
+# Univariate Analysis
+
+Variables considered statistically significant from univariate testing at the 10% level were considered in the multivariate model
+
+```{python}
+alpha=0.1
+```
+
+
+## Continuous Covariates
+For continuous covariates, univariate logistic regression was used to evaluate if they are statistically significant to add to the multivariate model.
+
+```{python}
+#vectorise the response variable
+ocular_df_f["va.o.num"]= pd.factorize(ocular_df_f["va outcome"])[0] 
+```
+
+### Mean injection interval (mean_inj_interval)
+
+```{python}
+Xtrain = ocular_df_f['mean_inj_interval']
+Xtrain=Xtrain.fillna(Xtrain.mean())
+ytrain = ocular_df_f['va.o.num'] 
+   
+# building the model and fitting the data 
+log_reg = sm.Logit(ytrain, Xtrain).fit() 
+print(log_reg.summary()) 
+sns.regplot(x='mean_inj_interval', y='va.o.num' , data=ocular_df_f, logistic=True, ci=None)
+```
+
+Where a coefficient near 0 indicates it is not a good predictor.
+
+## Binary and Categorical Covariates
+
+For binary and categorical covariates,  univariate analysis was made using Chi- square tests.
+
+```{python}
+categorical=['gender','ethnicity','age_group','loaded', 'regimen',"va_inj1_group"]
+gb_col=[]
+for i in categorical:
+    table=pd.crosstab(ocular_df_f[i],ocular_df_f['va outcome'])
+    g, p, dof, e =  scipy.stats.chi2_contingency(table)
+    gb_col.append({'covariate':i,
+    "statistic": g,
+    "p value": p})   
+cat_uni_test=pd.DataFrame(gb_col)
+cat_uni_test["significant"]=np.where(cat_uni_test["p value"]<=alpha,'yes','no')
+display(cat_uni_test)
+```
+
+# Multivariate Analysis
+From the univariate analysis, the best predictor features are: 
+va_inj1_group, ethnicity,age_group, loaded and regimen.
+
+```{python}
+#build covariates
+Xtrain = ocular_df_f[['va_inj1_group', 'ethnicity','age_group', 'loaded','regimen']]
+#define target variable
+ytrain = ocular_df_f['va.o.num'] 
+#fit model
+clf = LogisticRegression(random_state=0).fit(Xtrain, ytrain)
+#evaluate model
+clf.coef_
+```
