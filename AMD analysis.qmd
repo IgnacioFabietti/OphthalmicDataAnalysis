@@ -1,14 +1,30 @@
 ---
-title: "AMD Analysis"
+title: "Analysis of 12 years of anti-VEGF therapy for neovascular age-related macular degeneration (AMD)"
+
+date: 05/05/2023
+
+author:
+  - name: Marcos Fabietti
+    email: mifabietti@outlook.com
+abstract: > 
+  This analysis piece looks at AMD patients recieving anti-VEGF therapy, and evaluates the patients characterists in order to identify the statistically significant covariates.
+
 format:
   html:
     toc: true
+    number-sections: true
+
 execute:
   echo: false
 ---
 # Introduction
 
-This report aims to identify causes of AMD.
+In the UK, age-related macular degeneration (AMD) continues to be the leading cause of visual impairment certification. Without treatment, AMD causes irreversible vision deterioration, trouble with many elements of everyday life, and loss of independence. A meta-analysis of untreated eyes in clinical trials indicated that almost 50% had a "significant" decline (≥ 15 EDTRS letters) in vision after 12 months, with a comparable proportion categorised as legally blind (≤35 ETDRS letters).
+
+In order to study at this issue, we refer to a publicly available dataset: https://doi.org/10.5061/dryad.nvx0k6dqg , that was published as part of the scientific article named "Insights from survival analyses during 12 years of anti-VEGF therapy for neovascular age-related macular degeneration". The researchers of that article focused on a survival analyses for retrospective clinical practice visual outcomes. 
+
+We decided to look at this dataset from a different angle, looking at the main factors that cause poor visual acuity. This was done based on the definitions of The Second Report of Age-related Macular Degeneration Audit (AMD) of the National Ophthalmology Database Audit report, where defined the proportion of eyes with “good” visual acuity (≥ 70 ETDRS letters) after one year of treatment and the proportion of eyes with “poor” visual acuity change (≥10 ETDRS letter loss) after one year of treatment.
+
 
 ```{python}
 #load packages
@@ -18,7 +34,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import statsmodels.api as sm 
 import scipy.stats
-from sklearn.linear_model import LogisticRegression
 
 pd.options.display.float_format = "{:,.2f}".format
 
@@ -30,10 +45,20 @@ pd.options.display.float_format = "{:,.2f}".format
 #load data and print unique ids
 ocular_df=pd.read_csv(".\DataSet\MEH_AMD_survivaloutcomes_database.csv")
 ocular_df=ocular_df.iloc[:, 2:]
-print("number of subjects is: ", ocular_df['anon_id'].nunique())
+print(" The total number of subjects in this dataset is: ", ocular_df['anon_id'].nunique())
 ```
 
-As per the The Second Report of Age-related Macular Degeneration Audit (AMD) of the National Ophthalmology Database Audit report, we define the proportion of eyes with “good” visual acuity (≥ 70 ETDRS letters) after one year of treatment and the proportion of eyes with “poor” visual acuity change (≥10 ETDRS letter loss) after one year of treatment.
+Regarding the number of injections received by patients, we see the following count:
+
+```{python}
+n_injections=ocular_df['injnum'].value_counts()
+sns.lineplot(n_injections)
+```
+
+Where the peak was at the 3 dose count, and then it decreases from there. This is likely due to a data error, as to have 3 doses at least you must have 1 and 2 be the same.
+
+We proceeded to transform the event-based data to a patient-centric dataset, where the first and last measurements were compared in order to label the data, as mentioned in the introduction.
+
 
 ```{python}
 # define response variable
@@ -58,16 +83,16 @@ ocular_df_f= ocular_df_f.drop(columns=['first','last','diff','date_inj1','time',
 
 ## Proportion
 
-The propotion of the classes are:
+After classifying beteween "good" and "bad" va, and removing those that didn't fit either criteria,  the propotion of the classes are:
 
 ```{python}
-display(ocular_df_f['va outcome'].value_counts(normalize=True) * 100)
+display(pd.DataFrame(ocular_df_f['va outcome'].value_counts(normalize=True) * 100))
 ```
 
 and in absolute numbers:
 
 ```{python}
-display(ocular_df_f['va outcome'].value_counts())
+display(pd.DataFrame(ocular_df_f['va outcome'].value_counts()))
 ```
 
 ## Continous Variables
@@ -247,30 +272,25 @@ Where a coefficient near 0 indicates it is not a good predictor.
 For binary and categorical covariates,  univariate analysis was made using Chi- square tests.
 
 ```{python}
+pd.options.display.float_format = "{:,.3f}".format
+
 categorical=['gender','ethnicity','age_group','loaded', 'regimen',"va_inj1_group"]
 gb_col=[]
 for i in categorical:
-    table=pd.crosstab(ocular_df_f[i],ocular_df_f['va outcome'])
+    table=pd.crosstab(ocular_df_f[i],ocular_df_f["va outcome"])
     g, p, dof, e =  scipy.stats.chi2_contingency(table)
     gb_col.append({'covariate':i,
     "statistic": g,
-    "p value": p})   
+    "p value": p
+    })   
 cat_uni_test=pd.DataFrame(gb_col)
 cat_uni_test["significant"]=np.where(cat_uni_test["p value"]<=alpha,'yes','no')
 display(cat_uni_test)
 ```
 
-# Multivariate Analysis
-From the univariate analysis, the best predictor features are: 
+Where we identify as statistically significant covariates:
 va_inj1_group, ethnicity,age_group, loaded and regimen.
 
-```{python}
-#build covariates
-Xtrain = ocular_df_f[['va_inj1_group', 'ethnicity','age_group', 'loaded','regimen']]
-#define target variable
-ytrain = ocular_df_f['va.o.num'] 
-#fit model
-clf = LogisticRegression(random_state=0).fit(Xtrain, ytrain)
-#evaluate model
-clf.coef_
-```
+# Conclusion
+
+Both the initial VA and the ethnicity are factors of a patients can't be addressed, but in order to prevent lowering the VA of the patient: the treatment should aim to start the younger the patient is, the induction phase should be aimed to be completed within 90 days, and the regimen should be Aflibercept only. Lastly, the gender did not play a role in the VA progression, and neither did the Mean injection interval.

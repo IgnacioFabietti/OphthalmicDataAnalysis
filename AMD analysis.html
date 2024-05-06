@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Marcos Fabietti">
+<meta name="dcterms.date" content="2023-05-05">
 
-<title>AMD Analysis</title>
+<title>Analysis of 12 years of anti-VEGF therapy for neovascular age-related macular degeneration (AMD)</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -48,33 +50,33 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
-  <li><a href="#load-data-description" id="toc-load-data-description" class="nav-link" data-scroll-target="#load-data-description">Load Data &amp; Description</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#load-data-description" id="toc-load-data-description" class="nav-link" data-scroll-target="#load-data-description"><span class="header-section-number">2</span> Load Data &amp; Description</a>
   <ul class="collapse">
-  <li><a href="#proportion" id="toc-proportion" class="nav-link" data-scroll-target="#proportion">Proportion</a></li>
-  <li><a href="#continous-variables" id="toc-continous-variables" class="nav-link" data-scroll-target="#continous-variables">Continous Variables</a>
+  <li><a href="#proportion" id="toc-proportion" class="nav-link" data-scroll-target="#proportion"><span class="header-section-number">2.1</span> Proportion</a></li>
+  <li><a href="#continous-variables" id="toc-continous-variables" class="nav-link" data-scroll-target="#continous-variables"><span class="header-section-number">2.2</span> Continous Variables</a>
   <ul class="collapse">
-  <li><a href="#mean-injection-interval-mean_inj_interval" id="toc-mean-injection-interval-mean_inj_interval" class="nav-link" data-scroll-target="#mean-injection-interval-mean_inj_interval">Mean injection interval (mean_inj_interval)</a></li>
+  <li><a href="#mean-injection-interval-mean_inj_interval" id="toc-mean-injection-interval-mean_inj_interval" class="nav-link" data-scroll-target="#mean-injection-interval-mean_inj_interval"><span class="header-section-number">2.2.1</span> Mean injection interval (mean_inj_interval)</a></li>
   </ul></li>
-  <li><a href="#categorical-variables" id="toc-categorical-variables" class="nav-link" data-scroll-target="#categorical-variables">Categorical Variables</a>
+  <li><a href="#categorical-variables" id="toc-categorical-variables" class="nav-link" data-scroll-target="#categorical-variables"><span class="header-section-number">2.3</span> Categorical Variables</a>
   <ul class="collapse">
-  <li><a href="#gender" id="toc-gender" class="nav-link" data-scroll-target="#gender">Gender</a></li>
-  <li><a href="#ethnicity" id="toc-ethnicity" class="nav-link" data-scroll-target="#ethnicity">Ethnicity</a></li>
-  <li><a href="#age-group-age_group" id="toc-age-group-age_group" class="nav-link" data-scroll-target="#age-group-age_group">Age group (age_group)</a></li>
-  <li><a href="#loaded-loaded" id="toc-loaded-loaded" class="nav-link" data-scroll-target="#loaded-loaded">Loaded (loaded)</a></li>
-  <li><a href="#regimen" id="toc-regimen" class="nav-link" data-scroll-target="#regimen">Regimen</a></li>
-  <li><a href="#visual-acuity-at-first-injection-group-va_inj1_group" id="toc-visual-acuity-at-first-injection-group-va_inj1_group" class="nav-link" data-scroll-target="#visual-acuity-at-first-injection-group-va_inj1_group">Visual Acuity at first injection group (va_inj1_group)</a></li>
+  <li><a href="#gender" id="toc-gender" class="nav-link" data-scroll-target="#gender"><span class="header-section-number">2.3.1</span> Gender</a></li>
+  <li><a href="#ethnicity" id="toc-ethnicity" class="nav-link" data-scroll-target="#ethnicity"><span class="header-section-number">2.3.2</span> Ethnicity</a></li>
+  <li><a href="#age-group-age_group" id="toc-age-group-age_group" class="nav-link" data-scroll-target="#age-group-age_group"><span class="header-section-number">2.3.3</span> Age group (age_group)</a></li>
+  <li><a href="#loaded-loaded" id="toc-loaded-loaded" class="nav-link" data-scroll-target="#loaded-loaded"><span class="header-section-number">2.3.4</span> Loaded (loaded)</a></li>
+  <li><a href="#regimen" id="toc-regimen" class="nav-link" data-scroll-target="#regimen"><span class="header-section-number">2.3.5</span> Regimen</a></li>
+  <li><a href="#visual-acuity-at-first-injection-group-va_inj1_group" id="toc-visual-acuity-at-first-injection-group-va_inj1_group" class="nav-link" data-scroll-target="#visual-acuity-at-first-injection-group-va_inj1_group"><span class="header-section-number">2.3.6</span> Visual Acuity at first injection group (va_inj1_group)</a></li>
   </ul></li>
   </ul></li>
-  <li><a href="#univariate-analysis" id="toc-univariate-analysis" class="nav-link" data-scroll-target="#univariate-analysis">Univariate Analysis</a>
+  <li><a href="#univariate-analysis" id="toc-univariate-analysis" class="nav-link" data-scroll-target="#univariate-analysis"><span class="header-section-number">3</span> Univariate Analysis</a>
   <ul class="collapse">
-  <li><a href="#continuous-covariates" id="toc-continuous-covariates" class="nav-link" data-scroll-target="#continuous-covariates">Continuous Covariates</a>
+  <li><a href="#continuous-covariates" id="toc-continuous-covariates" class="nav-link" data-scroll-target="#continuous-covariates"><span class="header-section-number">3.1</span> Continuous Covariates</a>
   <ul class="collapse">
-  <li><a href="#mean-injection-interval-mean_inj_interval-1" id="toc-mean-injection-interval-mean_inj_interval-1" class="nav-link" data-scroll-target="#mean-injection-interval-mean_inj_interval-1">Mean injection interval (mean_inj_interval)</a></li>
+  <li><a href="#mean-injection-interval-mean_inj_interval-1" id="toc-mean-injection-interval-mean_inj_interval-1" class="nav-link" data-scroll-target="#mean-injection-interval-mean_inj_interval-1"><span class="header-section-number">3.1.1</span> Mean injection interval (mean_inj_interval)</a></li>
   </ul></li>
-  <li><a href="#binary-and-categorical-covariates" id="toc-binary-and-categorical-covariates" class="nav-link" data-scroll-target="#binary-and-categorical-covariates">Binary and Categorical Covariates</a></li>
+  <li><a href="#binary-and-categorical-covariates" id="toc-binary-and-categorical-covariates" class="nav-link" data-scroll-target="#binary-and-categorical-covariates"><span class="header-section-number">3.2</span> Binary and Categorical Covariates</a></li>
   </ul></li>
-  <li><a href="#multivariate-analysis" id="toc-multivariate-analysis" class="nav-link" data-scroll-target="#multivariate-analysis">Multivariate Analysis</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">4</span> Conclusion</a></li>
   </ul>
 </nav>
 </div>
@@ -82,73 +84,148 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">AMD Analysis</h1>
+<h1 class="title">Analysis of 12 years of anti-VEGF therapy for neovascular age-related macular degeneration (AMD)</h1>
 </div>
 
 
 
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Marcos Fabietti <a href="mailto:mifabietti@outlook.com" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">May 5, 2023</p>
+    </div>
+  </div>
   
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    <p>This analysis piece looks at AMD patients recieving anti-VEGF therapy, and evaluates the patients characterists in order to identify the statistically significant covariates.</p>
+  </div>
+</div>
 
 
 </header>
 
 
-<section id="introduction" class="level1">
-<h1>Introduction</h1>
-<p>This report aims to identify causes of AMD.</p>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>In the UK, age-related macular degeneration (AMD) continues to be the leading cause of visual impairment certification. Without treatment, AMD causes irreversible vision deterioration, trouble with many elements of everyday life, and loss of independence. A meta-analysis of untreated eyes in clinical trials indicated that almost 50% had a “significant” decline (≥ 15 EDTRS letters) in vision after 12 months, with a comparable proportion categorised as legally blind (≤35 ETDRS letters).</p>
+<p>In order to study at this issue, we refer to a publicly available dataset: https://doi.org/10.5061/dryad.nvx0k6dqg , that was published as part of the scientific article named “Insights from survival analyses during 12 years of anti-VEGF therapy for neovascular age-related macular degeneration”. The researchers of that article focused on a survival analyses for retrospective clinical practice visual outcomes.</p>
+<p>We decided to look at this dataset from a different angle, looking at the main factors that cause poor visual acuity. This was done based on the definitions of The Second Report of Age-related Macular Degeneration Audit (AMD) of the National Ophthalmology Database Audit report, where defined the proportion of eyes with “good” visual acuity (≥ 70 ETDRS letters) after one year of treatment and the proportion of eyes with “poor” visual acuity change (≥10 ETDRS letter loss) after one year of treatment.</p>
 </section>
-<section id="load-data-description" class="level1">
-<h1>Load Data &amp; Description</h1>
-<div id="ff3fd514" class="cell" data-execution_count="2">
+<section id="load-data-description" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Load Data &amp; Description</h1>
+<div id="e6a276f9" class="cell" data-execution_count="2">
 <div class="cell-output cell-output-stdout">
-<pre><code>number of subjects is:  7802</code></pre>
+<pre><code> The total number of subjects in this dataset is:  7802</code></pre>
 </div>
 </div>
-<p>As per the The Second Report of Age-related Macular Degeneration Audit (AMD) of the National Ophthalmology Database Audit report, we define the proportion of eyes with “good” visual acuity (≥ 70 ETDRS letters) after one year of treatment and the proportion of eyes with “poor” visual acuity change (≥10 ETDRS letter loss) after one year of treatment.</p>
-<section id="proportion" class="level2">
-<h2 class="anchored" data-anchor-id="proportion">Proportion</h2>
-<p>The propotion of the classes are:</p>
-<div id="cc0f9d0c" class="cell" data-execution_count="4">
-<div class="cell-output cell-output-display">
-<pre><code>good   60.81
-bad    39.19
-Name: va outcome, dtype: float64</code></pre>
-</div>
-</div>
-<p>and in absolute numbers:</p>
-<div id="158de654" class="cell" data-execution_count="5">
-<div class="cell-output cell-output-display">
-<pre><code>good    2588
-bad     1668
-Name: va outcome, dtype: int64</code></pre>
-</div>
-</div>
-</section>
-<section id="continous-variables" class="level2">
-<h2 class="anchored" data-anchor-id="continous-variables">Continous Variables</h2>
-<p>In this section we visualise and describe the continous variables:</p>
-<section id="mean-injection-interval-mean_inj_interval" class="level3">
-<h3 class="anchored" data-anchor-id="mean-injection-interval-mean_inj_interval">Mean injection interval (mean_inj_interval)</h3>
-<p>Mean interval between injections in induction phase in days.</p>
-<p>Normalised plot:</p>
-<div id="3b781412" class="cell" data-execution_count="6">
+<p>Regarding the number of injections received by patients, we see the following count:</p>
+<div id="e2ead678" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-4-output-1.png" width="610" height="411" class="figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Where the peak was at the 3 dose count, and then it decreases from there. This is likely due to a data error, as to have 3 doses at least you must have 1 and 2 be the same.</p>
+<p>We proceeded to transform the event-based data to a patient-centric dataset, where the first and last measurements were compared in order to label the data, as mentioned in the introduction.</p>
+<section id="proportion" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="proportion"><span class="header-section-number">2.1</span> Proportion</h2>
+<p>After classifying beteween “good” and “bad” va, and removing those that didn’t fit either criteria, the propotion of the classes are:</p>
+<div id="8d020043" class="cell" data-execution_count="5">
+<div class="cell-output cell-output-display">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">va outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">good</td>
+<td>60.81</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bad</td>
+<td>39.19</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+<p>and in absolute numbers:</p>
+<div id="50df23c5" class="cell" data-execution_count="6">
+<div class="cell-output cell-output-display">
+<div>
+<div>
+
+
+<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">va outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">good</td>
+<td>2588</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">bad</td>
+<td>1668</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="continous-variables" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="continous-variables"><span class="header-section-number">2.2</span> Continous Variables</h2>
+<p>In this section we visualise and describe the continous variables:</p>
+<section id="mean-injection-interval-mean_inj_interval" class="level3" data-number="2.2.1">
+<h3 data-number="2.2.1" class="anchored" data-anchor-id="mean-injection-interval-mean_inj_interval"><span class="header-section-number">2.2.1</span> Mean injection interval (mean_inj_interval)</h3>
+<p>Mean interval between injections in induction phase in days.</p>
+<p>Normalised plot:</p>
+<div id="c6e515db" class="cell" data-execution_count="7">
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="AMD%20analysis_files/figure-html/cell-8-output-1.png" width="1263" height="652" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The mode, minimum and maximum mean_inj_interval per group are:</p>
-<div id="a08ff2e8" class="cell" data-execution_count="7">
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div id="9956c345" class="cell" data-execution_count="8">
+<div class="cell-output cell-output-display" data-execution_count="8">
 <div>
 <div>
 
@@ -191,24 +268,24 @@ Name: va outcome, dtype: int64</code></pre>
 <p>It is a time-based feature, where both classes share the mode and minimum spacing, with the bad class having a higher max spacing.</p>
 </section>
 </section>
-<section id="categorical-variables" class="level2">
-<h2 class="anchored" data-anchor-id="categorical-variables">Categorical Variables</h2>
+<section id="categorical-variables" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="categorical-variables"><span class="header-section-number">2.3</span> Categorical Variables</h2>
 <p>In this section we visualise and describe the categorical/binary variables:</p>
-<section id="gender" class="level3">
-<h3 class="anchored" data-anchor-id="gender">Gender</h3>
+<section id="gender" class="level3" data-number="2.3.1">
+<h3 data-number="2.3.1" class="anchored" data-anchor-id="gender"><span class="header-section-number">2.3.1</span> Gender</h3>
 <p>Gender of patient (m = male, f = female).</p>
 <p>Normalised plot:</p>
-<div id="e12caa7e" class="cell" data-execution_count="8">
+<div id="7610c1f9" class="cell" data-execution_count="9">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-10-output-1.png" width="565" height="275" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The proportions of gender per group are:</p>
-<div id="819d8bd0" class="cell" data-execution_count="9">
+<div id="d9b262a6" class="cell" data-execution_count="10">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -255,20 +332,20 @@ Name: va outcome, dtype: int64</code></pre>
 </div>
 <p>Where the female to male ratio is closely to 62/38% in both.</p>
 </section>
-<section id="ethnicity" class="level3">
-<h3 class="anchored" data-anchor-id="ethnicity">Ethnicity</h3>
+<section id="ethnicity" class="level3" data-number="2.3.2">
+<h3 data-number="2.3.2" class="anchored" data-anchor-id="ethnicity"><span class="header-section-number">2.3.2</span> Ethnicity</h3>
 <p>Normalised plot:</p>
-<div id="5070cf36" class="cell" data-execution_count="10">
+<div id="4bccd3b8" class="cell" data-execution_count="11">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-11-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-12-output-1.png" width="1266" height="467" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The proportions of Ethnicity per group are:</p>
-<div id="985c0b4a" class="cell" data-execution_count="11">
+<div id="c0aa668e" class="cell" data-execution_count="12">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -339,21 +416,21 @@ Name: va outcome, dtype: int64</code></pre>
 </div>
 <p>Where in the bad outcome we find 3% more caucasian, 3% less other, 1% more south east asian, half of the afrocarribean and 0.1% more mixed.</p>
 </section>
-<section id="age-group-age_group" class="level3">
-<h3 class="anchored" data-anchor-id="age-group-age_group">Age group (age_group)</h3>
+<section id="age-group-age_group" class="level3" data-number="2.3.3">
+<h3 data-number="2.3.3" class="anchored" data-anchor-id="age-group-age_group"><span class="header-section-number">2.3.3</span> Age group (age_group)</h3>
 <p>Age at initiation of anti-VEGF therapy (50-59 years, 60-69 years, 70-79 years, 80 years and above).</p>
 <p>Normalised plot:</p>
-<div id="a3001c65" class="cell" data-execution_count="12">
+<div id="37b925b1" class="cell" data-execution_count="13">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-13-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-14-output-1.png" width="565" height="275" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The proportions of Age group per group are:</p>
-<div id="0f82006a" class="cell" data-execution_count="13">
+<div id="853410ca" class="cell" data-execution_count="14">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -416,21 +493,21 @@ Name: va outcome, dtype: int64</code></pre>
 </div>
 <p>Where we see an increase of counts from younger to older bins in both groups, however the bad category has a significant (10% more) over 80 than the good category.</p>
 </section>
-<section id="loaded-loaded" class="level3">
-<h3 class="anchored" data-anchor-id="loaded-loaded">Loaded (loaded)</h3>
+<section id="loaded-loaded" class="level3" data-number="2.3.4">
+<h3 data-number="2.3.4" class="anchored" data-anchor-id="loaded-loaded"><span class="header-section-number">2.3.4</span> Loaded (loaded)</h3>
 <p>If the induction phase was appropriately completed within 90 days (loaded) or not (nonleaded).</p>
 <p>Normalised plot:</p>
-<div id="dd04e540" class="cell" data-execution_count="14">
+<div id="46dd9ee9" class="cell" data-execution_count="15">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-15-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-16-output-1.png" width="565" height="275" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The proportions of loaded per group are:</p>
-<div id="45b52379" class="cell" data-execution_count="15">
+<div id="edce362d" class="cell" data-execution_count="16">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -477,21 +554,21 @@ Name: va outcome, dtype: int64</code></pre>
 </div>
 <p>Where we see a slight increase of non loaded (5%) in the bad category compared to the good category.</p>
 </section>
-<section id="regimen" class="level3">
-<h3 class="anchored" data-anchor-id="regimen">Regimen</h3>
+<section id="regimen" class="level3" data-number="2.3.5">
+<h3 data-number="2.3.5" class="anchored" data-anchor-id="regimen"><span class="header-section-number">2.3.5</span> Regimen</h3>
 <p>If the anti-VEGF drug given is ranibizumab (Ranabizumab only) or aflibercept (Aflibercept only).</p>
 <p>Normalised plot</p>
-<div id="7a414264" class="cell" data-execution_count="16">
+<div id="96ec6690" class="cell" data-execution_count="17">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-17-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-18-output-1.png" width="757" height="371" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The proportions of regimen per group are:</p>
-<div id="2ad59ed3" class="cell" data-execution_count="17">
+<div id="473dee2f" class="cell" data-execution_count="18">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -538,21 +615,21 @@ Name: va outcome, dtype: int64</code></pre>
 </div>
 <p>Where we see a very simlar proportion in both groups.</p>
 </section>
-<section id="visual-acuity-at-first-injection-group-va_inj1_group" class="level3">
-<h3 class="anchored" data-anchor-id="visual-acuity-at-first-injection-group-va_inj1_group">Visual Acuity at first injection group (va_inj1_group)</h3>
+<section id="visual-acuity-at-first-injection-group-va_inj1_group" class="level3" data-number="2.3.6">
+<h3 data-number="2.3.6" class="anchored" data-anchor-id="visual-acuity-at-first-injection-group-va_inj1_group"><span class="header-section-number">2.3.6</span> Visual Acuity at first injection group (va_inj1_group)</h3>
 <p>Visual acuity at baseline (initiation of anti-VEGF therapy) in early treatment diabetic retinopathy study letter score.</p>
 <p>Normalised plot</p>
-<div id="6deae227" class="cell" data-execution_count="18">
+<div id="c6a454ab" class="cell" data-execution_count="19">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-19-output-1.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-20-output-1.png" width="757" height="371" class="figure-img"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>The proportions of va_inj1_group per group are:</p>
-<div id="1f01098d" class="cell" data-execution_count="19">
+<div id="859f9d79" class="cell" data-execution_count="20">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -617,15 +694,15 @@ Name: va outcome, dtype: int64</code></pre>
 </section>
 </section>
 </section>
-<section id="univariate-analysis" class="level1">
-<h1>Univariate Analysis</h1>
+<section id="univariate-analysis" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> Univariate Analysis</h1>
 <p>Variables considered statistically significant from univariate testing at the 10% level were considered in the multivariate model</p>
-<section id="continuous-covariates" class="level2">
-<h2 class="anchored" data-anchor-id="continuous-covariates">Continuous Covariates</h2>
+<section id="continuous-covariates" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="continuous-covariates"><span class="header-section-number">3.1</span> Continuous Covariates</h2>
 <p>For continuous covariates, univariate logistic regression was used to evaluate if they are statistically significant to add to the multivariate model.</p>
-<section id="mean-injection-interval-mean_inj_interval-1" class="level3">
-<h3 class="anchored" data-anchor-id="mean-injection-interval-mean_inj_interval-1">Mean injection interval (mean_inj_interval)</h3>
-<div id="2e442740" class="cell" data-execution_count="22">
+<section id="mean-injection-interval-mean_inj_interval-1" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="mean-injection-interval-mean_inj_interval-1"><span class="header-section-number">3.1.1</span> Mean injection interval (mean_inj_interval)</h3>
+<div id="5c1f6761" class="cell" data-execution_count="23">
 <div class="cell-output cell-output-stdout">
 <pre><code>Optimization terminated successfully.
          Current function value: 0.689463
@@ -635,8 +712,8 @@ Name: va outcome, dtype: int64</code></pre>
 Dep. Variable:               va.o.num   No. Observations:                 4256
 Model:                          Logit   Df Residuals:                     4255
 Method:                           MLE   Df Model:                            0
-Date:                Sun, 05 May 2024   Pseudo R-squ.:                -0.02967
-Time:                        17:20:26   Log-Likelihood:                -2934.4
+Date:                Mon, 06 May 2024   Pseudo R-squ.:                -0.02967
+Time:                        10:09:08   Log-Likelihood:                -2934.4
 converged:                       True   LL-Null:                       -2849.8
 Covariance Type:            nonrobust   LLR p-value:                       nan
 =====================================================================================
@@ -648,7 +725,7 @@ mean_inj_interval     0.0022      0.000      5.254      0.000       0.001       
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="AMD%20analysis_files/figure-html/cell-23-output-2.png" class="img-fluid figure-img"></p>
+<p><img src="AMD%20analysis_files/figure-html/cell-24-output-2.png" width="589" height="429" class="figure-img"></p>
 </figure>
 </div>
 </div>
@@ -656,10 +733,10 @@ mean_inj_interval     0.0022      0.000      5.254      0.000       0.001       
 <p>Where a coefficient near 0 indicates it is not a good predictor.</p>
 </section>
 </section>
-<section id="binary-and-categorical-covariates" class="level2">
-<h2 class="anchored" data-anchor-id="binary-and-categorical-covariates">Binary and Categorical Covariates</h2>
+<section id="binary-and-categorical-covariates" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="binary-and-categorical-covariates"><span class="header-section-number">3.2</span> Binary and Categorical Covariates</h2>
 <p>For binary and categorical covariates, univariate analysis was made using Chi- square tests.</p>
-<div id="96d91422" class="cell" data-execution_count="23">
+<div id="bff09c59" class="cell" data-execution_count="24">
 <div class="cell-output cell-output-display">
 <div>
 <div>
@@ -679,43 +756,43 @@ mean_inj_interval     0.0022      0.000      5.254      0.000       0.001       
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
 <td>gender</td>
-<td>0.89</td>
-<td>0.35</td>
+<td>0.886</td>
+<td>0.347</td>
 <td>no</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
 <td>ethnicity</td>
-<td>17.80</td>
-<td>0.00</td>
+<td>17.795</td>
+<td>0.001</td>
 <td>yes</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
 <td>age_group</td>
-<td>121.35</td>
-<td>0.00</td>
+<td>121.345</td>
+<td>0.000</td>
 <td>yes</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
 <td>loaded</td>
-<td>13.24</td>
-<td>0.00</td>
+<td>13.243</td>
+<td>0.000</td>
 <td>yes</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
 <td>regimen</td>
-<td>7.98</td>
-<td>0.00</td>
+<td>7.982</td>
+<td>0.005</td>
 <td>yes</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">5</td>
 <td>va_inj1_group</td>
-<td>489.72</td>
-<td>0.00</td>
+<td>489.715</td>
+<td>0.000</td>
 <td>yes</td>
 </tr>
 </tbody>
@@ -725,11 +802,12 @@ mean_inj_interval     0.0022      0.000      5.254      0.000       0.001       
 </div>
 </div>
 </div>
+<p>Where we identify as statistically significant covariates: va_inj1_group, ethnicity,age_group, loaded and regimen.</p>
 </section>
 </section>
-<section id="multivariate-analysis" class="level1">
-<h1>Multivariate Analysis</h1>
-<p>From the univariate analysis, the best predictor features are: va_inj1_group, ethnicity,age_group, loaded and regimen.</p>
+<section id="conclusion" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Conclusion</h1>
+<p>Both the initial VA and the ethnicity are factors of a patients can’t be addressed, but in order to prevent lowering the VA of the patient: the treatment should aim to start the younger the patient is, the induction phase should be aimed to be completed within 90 days, and the regimen should be Aflibercept only. Lastly, the gender did not play a role in the VA progression, and neither did the Mean injection interval.</p>
 </section>
 
 </main>
